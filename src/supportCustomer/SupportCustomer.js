@@ -13,6 +13,8 @@ import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
+
+const requestDomain = document.getElementById("requestPath").getAttribute("data-server");
 const MySwal = withReactContent(Swal);
 
 export default function SupportCustomer() {
@@ -39,8 +41,11 @@ export default function SupportCustomer() {
     }, []);
 
     var getEventCustomer = async function () {
-        let resp = await fetch("http://localhost:3001/api/clients/",
+        let myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        let resp = await fetch(requestDomain + "/admin/getClients",
             {
+                headers: myHeaders,
                 method: "GET"
             }
         );
@@ -52,25 +57,37 @@ export default function SupportCustomer() {
     };
 
     //DELETE cashier
-    var deleteEventCustomer = async function (id) {
-        let resp = await fetch("http://localhost:3001/api/clients/" +id,
-            {
-                method: "DELETE"
+    var deleteEventCustomer = async function (id, name) {
+        MySwal.fire({
+            title: '¿Estas seguro?',
+            html: "Si elimina este cliente <strong class='text-danger'>"+name+"</strong> sera definitivo!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                let resp = await fetch(requestDomain + "/admin/deleteClients/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+                let auxResp = await resp.json();
+                getEventCustomer();
+                Swal.fire(
+                    auxResp.mssg,
+                    (auxResp.status === 1) ? "<i>Cliente eliminado</i>" : "<i>ERROR</i>",
+                    (auxResp.status === 1) ? 'success' : 'error'
+                )
             }
-        );
-        let auxResp = await resp.json();
-        getEventCustomer();
-        await MySwal.fire({
-            tittle: "<strong>" + auxResp.mssg + "</strong>",
-            html: (auxResp.status === 1) ? <i>Cliente eliminado</i> : <i>ERROR</i>,
-            icon: (auxResp.status === 1) ? 'success' : 'error'
         })
         return;
     };
 
     //Get ONE cashier
     var getEventOneCustomer = async function (id) {
-        let resp = await fetch("http://localhost:3001/api/clients/" + id,
+        let resp = await fetch(requestDomain + "/admin/getClient/" + id,
             {
                 method: "GET"
             }
@@ -104,7 +121,7 @@ export default function SupportCustomer() {
     var updateEventCustomer = async function (id) {
         let myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
-        let resp = await fetch("http://localhost:3001/api/clients/" + id,
+        let resp = await fetch(requestDomain + "/admin/clients/" + id,
             {
                 method: "PUT",
                 headers: myHeaders,
@@ -126,7 +143,7 @@ export default function SupportCustomer() {
         getEventCustomer();
         await MySwal.fire({
             tittle: "<strong>" + auxResp.mssg + "</strong>",
-            html: (auxResp.status === 1) ? <i>Cajero modificado</i> : <i>ERROR</i>,
+            html: (auxResp.status === 1) ? <i>Cliente modificado</i> : <i>ERROR</i>,
             icon: (auxResp.status === 1) ? 'success' : 'error'
         })
         return;
@@ -136,7 +153,7 @@ export default function SupportCustomer() {
     var addEventCustomer = async function () {
         let myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
-        let resp = await fetch("http://localhost:3001/api/clients",
+        let resp = await fetch(requestDomain + "/admin/addClient",
             {
                 method: "POST",
                 headers: myHeaders,
@@ -158,7 +175,7 @@ export default function SupportCustomer() {
         getEventCustomer();
         await MySwal.fire({
             tittle: "<strong>" + auxResp.mssg + "</strong>",
-            html: (auxResp.status === 1) ? <i>Cajero agregado</i> : <i>ERROR</i>,
+            html: (auxResp.status === 1) ? <i>Cliente agregado</i> : <i>ERROR</i>,
             icon: (auxResp.status === 1) ? 'success' : 'error'
         })
         return;
@@ -196,7 +213,7 @@ export default function SupportCustomer() {
                 </Modal.Body>
                 <Modal.Footer>
                     <>
-                        <Button variant="secondary">Cancelar</Button>
+                        <Button variant="secondary" onClick={() => { setShowAdd(false) }}>Cancelar</Button>
                         <Button variant="primary" onClick={addEventCustomer}>Guardar</Button>
                     </>
                 </Modal.Footer>
@@ -236,7 +253,7 @@ export default function SupportCustomer() {
                 </Modal.Body>
                 <Modal.Footer>
                     <>
-                        <Button variant="secondary">Cancelar</Button>
+                        <Button variant="secondary" onClick={() => { setShowAdd(false) }}>Cancelar</Button>
                         <Button variant="primary" onClick={() => updateEventCustomer(showId)}>Guardar</Button>
                     </>
                 </Modal.Footer>
@@ -245,21 +262,18 @@ export default function SupportCustomer() {
     }
 
 
-
-
-
     return (
 
         <Container className="supportCustomer" fluid >
-            <Row>
+            <Row className="row-header">
                 <Col sm={3} md={4} lg={4}>
-                    <Image className="logo" src={Logo}></Image>
+                    <Image cclassName="logo mt-4" src={Logo}></Image>
                 </Col >
-                <Col className="title" sm={7} md={4} lg={4}>
-                    <h2>Catálogo de Clientes</h2>
+                <Col className="text-center" sm={7} md={4} lg={4}>
+                    <h2 className="mt-4">Catálogo de Clientes</h2>
                 </Col>
-                <Col className="col-button-close" sm={2} md={4} lg={4}>
-                    <Button className="mb-3 button-close" variant="primary">Cerrar sesión</Button>
+                <Col sm={2} md={4} lg={4}>
+                    <Button style={{ float: "right" }} className="button-close mt-4" variant="primary" href="/logout">Cerrar sesión</Button>
                 </Col>
             </Row>
             <Row className="justify-content-md-end">
@@ -279,7 +293,7 @@ export default function SupportCustomer() {
                                 <th>Rol</th>
                                 <th>Estatus</th>
                                 <th>Género</th>
-                                <th>Editar</th>
+                                {/* <th>Editar</th> */}
                                 <th>Eliminar</th>
                             </tr>
                         </thead>
@@ -293,16 +307,16 @@ export default function SupportCustomer() {
                                     <td>{product.rol}</td>
                                     <td>{product.status}</td>
                                     <td>{product.gender}</td>
-                                    <td>
+                                   {/*  <td>
                                         <Button className="mb-3 add-product" variant="light" onClick={() => {
                                             getEventOneCustomer(product._id);
                                             setShowUpdate(true);
                                         }}>
                                             ✏️
                                         </Button>
-                                    </td>
+                                    </td> */}
                                     <td>
-                                        <Button className="mb-3 add-product" variant="light" onClick={() => deleteEventCustomer(product._id)}>
+                                        <Button className="mb-3 add-product" variant="light" onClick={() => deleteEventCustomer(product._id, product.name)}>
                                             <FontAwesomeIcon className="icon-trash" icon={faTrashAlt} />
                                         </Button>
                                     </td>

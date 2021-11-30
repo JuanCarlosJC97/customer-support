@@ -1,49 +1,38 @@
 .supportCustomer {
-    max-width: initial !important;
-    min-height: 99.9vh !important;
-    min-width: 99.9vh !important;
-    font-family: adobe-caslon-pro, serif;
-    background-image: url("../images/fondoadmin.png");
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .logo {
-    height: 7rem !important;
-    margin-bottom: 3rem;
-  }
-  .title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-
-  .button-close {
-    height: 3rem;
-    width: 10rem;
-    font-size: 1.3rem !important;
-    background-color: #fee663 !important;
-    color: #000000 !important;
-    border-radius: 2rem !important;
-    border-color: #fee663 !important;
-  }
-  .add-customer {
-    width: 12rem;
-  }
-  .icon-plus {
-    color: #62b01e !important;
-  }
-  .icon-trash {
-    color: #8594a0 !important;
-  }
-  .table-customers {
-    justify-content: center;
-    background-color: #ffffff !important;
-  }
-  .img-customer {
-    height: 10.38rem !important;
-    padding: 1rem;
-  }
-  /* .justify-content-md{
+  min-height: 99.9vh !important;
+  background-image: url("../images/fondoadmin.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 99.9% 99.9%;
+}
+.logo {
+  height: 5rem !important;
+}
+.row-header {
+  padding: 1rem !important;
+  border-bottom: 0.2rem solid rgba(17, 53, 50, 1) !important;
+  background-color: rgba(255, 255, 255, 0.39);
+}
+.button-close {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  float: right;
+  border-color: #000000 !important;
+  color: #000 !important;
+  border-radius: 25px !important;
+}
+.add-customer {
+  width: 12rem;
+}
+.icon-plus {
+  color: #62b01e !important;
+}
+.icon-trash {
+  color: #8594a0 !important;
+}
+.table-customers {
+  justify-content: center;
+  background-color: #ffffff !important;
+}
+/* .justify-content-md{
       margin-top: 5rem !important;
   } */
