@@ -7,7 +7,6 @@ import Table from 'react-bootstrap/Table'
 import { Modal } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { FormLabel } from 'react-bootstrap';
-import Customer from '../images/customer.jpg'
 import './SupportCustomer.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -251,16 +250,15 @@ export default function SupportCustomer() {
 
     return (
 
-        <Container className="supportCustomer">
+        <Container className="supportCustomer" fluid >
             <Row>
-                <Col md={4} lg={4}>
+                <Col sm={3} md={4} lg={4}>
                     <Image className="logo" src={Logo}></Image>
                 </Col >
-                <Col className="title" sm={6} md={4} lg={4}>
-                    <h1>Catálogo de Clientes</h1>
+                <Col className="title" sm={7} md={4} lg={4}>
+                    <h2>Catálogo de Clientes</h2>
                 </Col>
-                <Col className="col-button-close" sm={4} md={4} lg={4}>
-                    <Button className="mb-3 button-inicio" variant="link">Inicio</Button>
+                <Col className="col-button-close" sm={2} md={4} lg={4}>
                     <Button className="mb-3 button-close" variant="primary">Cerrar sesión</Button>
                 </Col>
             </Row>
@@ -270,7 +268,7 @@ export default function SupportCustomer() {
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} sm={12} md={12} lg={12}>
+                <Col>
                     <Table className="table-customers" bordered size="sm" responsive>
                         <thead>
                             <tr>
@@ -314,11 +312,7 @@ export default function SupportCustomer() {
                     </Table>
                 </Col>
             </Row>
-            <Row className="justify-content-md">
-                <Col lg={12}>
-                    <Image className="img-customer" src={Customer} roundedCircle></Image>
-                </Col>
-            </Row>
+
             <FormModalCustomer
                 show={show}
                 onHide={() => setShow(false)}
