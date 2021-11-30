@@ -114,6 +114,7 @@ export default function SupportCustomer() {
         setStatus(status);
         setGender(gender);
 
+        setShowUpdate(true);
         return;
     };
 
@@ -221,46 +222,39 @@ export default function SupportCustomer() {
         )
     }
 
-    function FormModalCustomerUpdate(props) {
-        return (
-            <Modal {...props} className="modal" aria-labelledby="contained-modal-title-center">
-                <Modal.Header closeButton>
-                    <h1>Modificar Cliente</h1>
-                </Modal.Header>
-                <Modal.Body className="modalBody">
-                    <>
-                        <FormLabel> Nombre *</FormLabel>
-                        <FormControl id="nameUpdate" value={showName} onChange={(e) => setName(e.target.value)} />
 
-                        <FormLabel> Apellidos *</FormLabel>
-                        <FormControl id="lastNameUpdate" type="text" value={showLastName} onChange={(e) => setLastName(e.target.value)} />
-
-                        <FormLabel> Fecha de nacimiento *</FormLabel>
-                        <FormControl id="dateOfBirthUpdate" type="text" value={showDateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
-
-                        <FormLabel> Correo electrónico *</FormLabel>
-                        <FormControl id="emailAddressUpdate" type="email" value={showEmailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
-
-                        <FormLabel> Rol *</FormLabel>
-                        <FormControl id="rolUpdate" value={showRol} onChange={(e) => setRol(e.target.value)} />
-
-                        <FormLabel> Estatus *</FormLabel>
-                        <FormControl id="statusUpdate" value={showStatus} onChange={(e) => setStatus(e.target.value)} />
-
-                        <FormLabel> Genero *</FormLabel>
-                        <FormControl id="genderUpdate" value={showGender} onChange={(e) => setGender(e.target.value)} />
-                    </>
-                </Modal.Body>
-                <Modal.Footer>
-                    <>
-                        <Button variant="secondary" onClick={() => { setShowAdd(false) }}>Cancelar</Button>
-                        <Button variant="primary" onClick={() => updateEventCustomer(showId)}>Guardar</Button>
-                    </>
-                </Modal.Footer>
-            </Modal >
-        );
+    const [ datosSel, setDatosSel ] = useState({
+        _id: '',
+        name: '',
+        lastName: '',
+        dateOfBirth: '',
+        emailAddress: '',
+        rol: '',
+        status: '',
+        gender: ''
+    })
+    
+    const selcc = (e, c) =>{
+        setDatosSel(e);
+       (c === 'edit') && setShowUpdate(true)
     }
 
+    const handleChange = e => {
+        const {name,value}= e.target;
+        setDatosSel((prevState) => ({
+            ...prevState,
+            [name]: value
+        }))
+        console.log(datosSel);
+    }
+
+
+/*     function FormModalCustomerUpdate(props) {
+        return (
+            
+        );
+    }
+ */
 
     return (
 
@@ -335,10 +329,41 @@ export default function SupportCustomer() {
                 show={showAdd}
                 onHide={() => setShowAdd(false)}
             />
-            <FormModalCustomerUpdate
-                show={showUpdate}
-                onHide={() => setShowUpdate(false)}
-            />
+            <Modal show={showUpdate} onHide={() => setShowUpdate(false)} className="modal" aria-labelledby="contained-modal-title-center">
+                <Modal.Header closeButton>
+                    <h1>Modificar Cliente</h1>
+                </Modal.Header>
+                <Modal.Body className="modalBody">
+                    <>
+                        <FormLabel> Nombre *</FormLabel>
+                        <FormControl id="nameUpdate" name="name" value={datosSel && datosSel.code} onChange={handleChange} />
+
+                        <FormLabel> Apellidos *</FormLabel>
+                        <FormControl id="lastNameUpdate" name="lastName" value={datosSel && datosSel.code} onChange={handleChange}/>
+
+                        <FormLabel> Fecha de nacimiento *</FormLabel>
+                        <FormControl id="dateOfBirthUpdate" name="dateOfBirth" value={datosSel && datosSel.code} onChange={handleChange}/>
+
+                        <FormLabel> Correo electrónico *</FormLabel>
+                        <FormControl id="emailAddressUpdate" name="emailAddress" value={datosSel && datosSel.code} onChange={handleChange}/>
+
+                        <FormLabel> Rol *</FormLabel>
+                        <FormControl id="rolUpdate" name="rol" value={datosSel && datosSel.code} onChange={handleChange}/>
+
+                        <FormLabel> Estatus *</FormLabel>
+                        <FormControl id="statusUpdate" name="status" value={datosSel && datosSel.code} onChange={handleChange}/>
+
+                        <FormLabel> Genero *</FormLabel>
+                        <FormControl id="genderUpdate" name="gender" value={datosSel && datosSel.code} onChange={handleChange}/>
+                    </>
+                </Modal.Body>
+                <Modal.Footer>
+                    <>
+                        <Button variant="secondary" onClick={() => { setShowAdd(false) }}>Cancelar</Button>
+                        <Button variant="primary" onClick={() => updateEventCustomer(datosSel._id)}>Guardar</Button>
+                    </>
+                </Modal.Footer>
+            </Modal >
         </Container>
     )
 }
